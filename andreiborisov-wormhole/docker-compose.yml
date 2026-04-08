@@ -1,0 +1,21 @@
+services:
+
+  sing-box:
+    image: ghcr.io/sagernet/sing-box:v1.13.5@sha256:8772c662c8e349d3afb0c233ccc3864d7df69ce840d5aa25db4c248d5bcb44f7
+    container_name: sing-box
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    network_mode: host
+    command:
+      - -D
+      - /var/lib/sing-box
+      - -c
+      - /etc/sing-box/config.json
+      - run
+    volumes:
+      - ${APP_DATA_DIR}/data/sing-box/config.json:/etc/sing-box/config.json:ro
+      - ${APP_DATA_DIR}/data/sing-box/tls:/etc/sing-box/tls:ro
+      - ${APP_DATA_DIR}/data/sing-box/data:/var/lib/sing-box
+    restart: unless-stopped
